@@ -1,4 +1,5 @@
 //RESUELVE TUS EJERCICIOS AQUI
+const tarjeta = [];
 /*let raza = "komondor";
 
 //1.- Declara una funcion getAllBreeds que devuelva un array de strings con todas las razas de perro
@@ -62,6 +63,7 @@ const printGithubUserProfile = (username) => {
       const arrayUser = {
         img: data.avatar_url,
         name: data.name,
+        let repos = data.public_repos
       };
       const imgElement = document.createElement("img");
       const nameElement = document.createElement("p");
@@ -75,31 +77,38 @@ const printGithubUserProfile = (username) => {
 console.log(printGithubUserProfile("alenriquez96"));
 */
 //7.- La función devuelve una tarjeta con la info del usuario
-
-/*
-function getAndPrintGitHubUserProfile() {
-  const url = `https://api.github.com/users/guille`;
-  fetch(url)
+fetch("/usuario.json")
     .then((response) => response.json()) // Convertir a objeto
-    .then((data) => {
-      let seccion = "<section>";
-      data.forEach((item) => {
-        seccion += `<img src="${item.avatar_url}" alt="Alberto Enríquez">
-            <h1>${item.name}</h1>
-            <p>Public repos: ${item.public_repos}</p>`;
-      });
-      seccion += "</section>";
-      document.body.innerHTML = seccion;
-    });
+    .then((data) =>{
+      let name = data.name
+      let avatar = data.avatar_url
+      let repos = data.public_repos
+      tarjeta.push([name, avatar,repos])
+    }); 
+    console.log(tarjeta.name);
+    
+    /*
+function getAndPrintGitHubUserProfile() {
+  let usuario = document.getElementById("usuario");
+  const imgElement = document.createElement("img");
+  const nameElement = document.createElement("h1");
+  const reposElement = document.createElement("h1");
+  imgElement.src = tarjeta[1];
+  nameElement.textContent = tarjeta[0];
+  reposElement.textContent = tarjeta[2];
+  usuario.appendChild(imgElement);
+  usuario.appendChild(nameElement);
+  usuario.appendChild(reposElement);
+  
 }
-console.log(getAndPrintGitHubUserProfile());
+getAndPrintGitHubUserProfile();
 
 //8.- Manipulación del DOM: Crea un input de tipo texto, y un botón buscar. El usuario escribirá en el input el nombre de usuario de GitHub que quiera buscar. Después llamaremos a la función getAndPrintGitHubUserProfile(username) que se ejecute cuando se pulse el botón buscar.(Esto no se testea)
-let userName = document.getElementById("name").value;
-document.getElementById("buscar").addEventListener("click", function () {
+/*let userName = document.getElementById("name").value;
+document.getElementBy"Id(buscar").addEventListener("click", function () {
   getAndPrintGitHubUserProfile();
-});
-*/
+});*/
+
 //9.- La función devuelve un array con la url y el nombre de cada usuario
 
 /*
@@ -110,6 +119,7 @@ const fetchGithubUsers = (array) =>{
     return array[0]
 }
 console.log(fetchGithubUsers(result9));*/
+/*
 let username1 = "alenriquez96";
 let username2 = "alejandroereyesb";
 let username3 = "octocat";
@@ -145,4 +155,4 @@ const fetchGithubUsers = (name1, name2, name3) => {
   return result9;
 };
 
-console.log(fetchGithubUsers(username1, username2, username3));
+console.log(fetchGithubUsers(username1, username2, username3));*/
