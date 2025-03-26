@@ -1,5 +1,5 @@
 //RESUELVE TUS EJERCICIOS AQUI
-const tarjeta = [];
+
 /*let raza = "komondor";
 
 //1.- Declara una funcion getAllBreeds que devuelva un array de strings con todas las razas de perro
@@ -75,84 +75,51 @@ const printGithubUserProfile = (username) => {
     });
 };
 console.log(printGithubUserProfile("alenriquez96"));
-*/
+
 //7.- La función devuelve una tarjeta con la info del usuario
-fetch("/usuario.json")
+function getAndPrintGitHubUserProfile(userName) {
+  return fetch(`https://api.github.com/users/${userName}`)
     .then((response) => response.json()) // Convertir a objeto
-    .then((data) =>{
-      let name = data.name
-      let avatar = data.avatar_url
-      let repos = data.public_repos
-      tarjeta.push([name, avatar,repos])
-    }); 
-    console.log(tarjeta.name);
-    
-    /*
-function getAndPrintGitHubUserProfile() {
-  let usuario = document.getElementById("usuario");
-  const imgElement = document.createElement("img");
-  const nameElement = document.createElement("h1");
-  const reposElement = document.createElement("h1");
-  imgElement.src = tarjeta[1];
-  nameElement.textContent = tarjeta[0];
-  reposElement.textContent = tarjeta[2];
-  usuario.appendChild(imgElement);
-  usuario.appendChild(nameElement);
-  usuario.appendChild(reposElement);
-  
+    .then((data) => {
+      let section = `<section>
+    <img src="${data.avatar_url}" alt="${data.name}">
+    <h1>${data.name}</h1>
+    <p>Public repos: ${data.public_repos}</p>
+</section>`;
+      return section;
+    });
 }
 getAndPrintGitHubUserProfile();
 
 //8.- Manipulación del DOM: Crea un input de tipo texto, y un botón buscar. El usuario escribirá en el input el nombre de usuario de GitHub que quiera buscar. Después llamaremos a la función getAndPrintGitHubUserProfile(username) que se ejecute cuando se pulse el botón buscar.(Esto no se testea)
-/*let userName = document.getElementById("name").value;
-document.getElementBy"Id(buscar").addEventListener("click", function () {
-  getAndPrintGitHubUserProfile();
-});*/
 
+document.getElementById("buscar").addEventListener("click", function () {
+  let userName = document.getElementById("name").value;
+  getAndPrintGitHubUserProfile(userName);
+});
+*/
 //9.- La función devuelve un array con la url y el nombre de cada usuario
 
-/*
-const fetchGithubUsers = (array) =>{
-    let result = Promise.all([url1, url2, url3]);
-    result.then((data) => data);
-    array.push(result)
-    return array[0]
+function getUserData(username) {
+  return fetch(`https://api.github.com/users/${username}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const userData = { realNames: data.name, userNames: data.login, url:data.url };
+        return userData;
+      })
 }
-console.log(fetchGithubUsers(result9));*/
-/*
-let username1 = "alenriquez96";
-let username2 = "alejandroereyesb";
-let username3 = "octocat";
 
-const fetchGithubUsers = (name1, name2, name3) => {
-  let result9 = [];
 
-  Promise.all([
-    fetch(`https://api.github.com/users/${name1}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const array = { realNames: data.name, userNames: data.login };
-        return array;
-      }),
-    fetch(`https://api.github.com/users/${name2}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const array = { realNames: data.name, userNames: data.login };
-        return array;
-      }),
-    fetch(`https://api.github.com/users/${name3}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const array = { realNames: data.name, userNames: data.login };
-        return array;
-      }),
-  ]).then(([user1, user2, user3]) => {
-    result9.push(
-      [user3.userNames, user1.userNames, user2.userNames],
-      [user3.realNames, user1.realNames, user2.realNames]
-    );
+const fetchGithubUsers = (nameList) => { // nameList = ["alenriquez96", "alejandroereyesb", "octocat"]
+
+  // mapear de array de nombres a array de promesas
+  return Promise.all(nameList.map(name => getUserData(name))) // ["alenriquez96", "alejandroereyesb", "octocat"] -> [Promise, Promise, Promise]-> [getUserData("alenriquez96"), getUserData("alejandroereyesb"), getUserData("octocat")]
+          .then((data) => {
+            data.forEach((user) => {
+              console.log(user.url);
+            });
+            return data;
   });
-  return result9;
 };
-
-console.log(fetchGithubUsers(username1, username2, username3));*/
+fetchGithubUsers(["alenriquez96", "alejandroereyesb", "octocat"])
+.then((data) => console.log(data));
